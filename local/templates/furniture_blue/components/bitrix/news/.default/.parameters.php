@@ -9,5 +9,9 @@ $arTemplateParameters = array(
 		"VALUE" => "Y",
 		"DEFAULT" =>"N",
 	),
+	"IBLOCK_ID_CANONICAL" => Array(
+		"NAME" => GetMessage("CANONICAL"),
+		"TYPE" => "TEXT",
+	),
 );
 ?>
