@@ -19,3 +19,29 @@ class MyClass
         }
     }
 }
+
+AddEventHandler("main", "OnBeforeEventAdd", "OnBeforeEventAddHandler");
+function OnBeforeEventAddHandler(&$event, &$lid, &$arFields)
+{
+    if($event == 'FEEDBACK_FORM'){
+        global $USER;
+        if($USER->IsAuthorized()){
+            $arFields['AUTHOR'] = GetMessage('AUTHOR_AUTORISE', array(
+                                                                    '#ID#' => $USER->GetID(),
+                                                                    '#LOGIN#' => $USER->GetLogin(),
+                                                                    '#NAME#' => $USER->GetFirstName(),
+                                                                    '#AUTHOR_IN_FORM#' => $arFields['AUTHOR']
+                                                                    )
+                                             );
+        }else{
+            $arFields['AUTHOR'] = GetMessage('AUTHOR_NOT_AUTORISE', array('#AUTHOR_IN_FORM#' => $arFields['AUTHOR']));
+        }
+        
+        CEventLog::Add(array(
+         "SEVERITY" => "INFO",
+         "AUDIT_TYPE_ID" => "FEEDBACK_FORM",
+         "MODULE_ID" => "main",
+         "DESCRIPTION" => GetMessage('MESSAGE_LOG', array('#AUTHOR#' => $arFields['AUTHOR']))
+         ));
+    }
+}
