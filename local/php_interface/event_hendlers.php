@@ -45,3 +45,20 @@ function OnBeforeEventAddHandler(&$event, &$lid, &$arFields)
          ));
     }
 }
+
+
+AddEventHandler("main", "OnBuildGlobalMenu", "OnBuildGlobalMenuHandler");
+function OnBuildGlobalMenuHandler(&$aGlobalMenu, &$aModuleMenu)
+{
+     global $USER;
+     $userGroup = CUser::GetUserGroup($USER->GetID());
+     if(!in_array(5,$userGroup))
+        return;
+    unset($aGlobalMenu['global_menu_desktop']);
+    foreach($aModuleMenu as $key=>$menu){
+        if($menu['text'] != 'Новости'){
+            unset($aModuleMenu[$key]);
+        }
+    }
+}
+
